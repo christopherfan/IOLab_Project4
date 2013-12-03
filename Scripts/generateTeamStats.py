@@ -236,6 +236,79 @@ def readTeamSeasonStat():
 			
 	json_file.close()
 	return json_data	
+	
+def readFFRoster():
+	txt_file = open ('FFTeams.txt', 'r')
+	json_data = {}
+	json_team = {}
+	counter = 0
+		
+	for line in txt_file:
+		read_word = line.strip()		
+		words = read_word.split('\t')				
+		if(words[0] =="TEAM"):
+			print "Team: ", words[1], " has players: "
+			team = words[1]
+			json_data[team] = {}
+			json_team = {}
+			counter = 0
+		else:
+			print "Player", words[1], " at position: ", words[0]		
+			player = {}
+			player['player_name'] = words[1]
+			player['position'] = words[0]
+			print player
+			json_team[str(counter)] = player
+			counter+=1
+			json_data[team]= json_team
+	
+	txt_file.close()
+	
+	json_write = open('ffTeamsJSON.json','w')
+	json_write.write(json.dumps(json_data))
+	json_write.close()	
+	#print json_data
+	#return json_data
+
+def readFFTeams():
+	json_file = open ('../Data/ffTeamsJSON.json', 'r')
+	json_data = json.load(json_file)
+	season_json = {}
+			
+	json_file.close()
+	return json_data	
+
+def readFFTeamsStats():
+	json_file = open ('../Data/ffTeamsStatsJSON.json', 'r')
+	json_data = json.load(json_file)
+	season_json = {}
+			
+	json_file.close()
+	return json_data		
+	
+def createSeasonPlayerStats():
+	ff_league = readFFTeams()
+	
+	for key_team, team in ff_league.iteritems():
+		print key_team
+	
+		for key, player in  team.iteritems():
+			#print key, player
+			#print player['position'], player['player_name']
+			if( player['position'] != "DEF"):
+				player_search = searchPlayer(player['player_name'], player['position'])
+				stats = genPlayerSeasonJSON(player_search.player_id, 17)
+				player['stats']= stats
+			else:
+				stat = genSeasonTeamStat(player['player_name'],17)
+				player['stats'] = stat
+			
+	#print team_object
+	json_write = open('ffTeamsStatsJSON.json','w')
+	json_write.write(json.dumps(ff_league))
+	json_write.close()	
+
+		
 def main():
 	
 	#genSeasonTeamStat('SEA',17)
@@ -244,16 +317,20 @@ def main():
 	#print showPlayerStat(player.player_id, 1)
 	
 	#>>>>>>>>>>>> Player Testing
-	# player =  searchPlayer('Brady', 'QB')	
+	#player =  searchPlayer('Brady', 'QB')	
 	#print showPlayerStat(player.player_id, 9)	
-	# for stuff in genPlayerSeasonJSON(player.player_id,17).items():
-		# print stuff
+	#temp1 = genPlayerSeasonJSON(player.player_id,17)	
+	#temp = genPlayerSeasonJSON(player.player_id,17)	.items()	
+	# for counter in xrange(len(temp)):
+		# print temp[counter]
 	
+	createSeasonPlayerStats()
+	#readFFRoster()
 	#>>>>>>>>>>>> Defense Stat
 	#showStatDefense( 'SF', 15)
 	#genSeasonTeamStat('ARI',17)
 	#printSeason(readSeasonStat(),3)
 	#printSeasonTotals(readSeasonStat())
-	allTeamStatistics()
+	#allTeamStatistics()
 if __name__ == "__main__":
 	main()
