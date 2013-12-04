@@ -1,6 +1,6 @@
 import nfldb, json
 
-STAT_STRING_LIST = ['passing_yds', 'passing_tds',  'passing_int', 'rushing_yds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds', 'fumbles_lost', 'passing_twoptm']	
+STAT_STRING_LIST = ['passing_yds', 'passing_tds',  'passing_int', 'rushing_yds','rushing_tds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds', 'fumbles_lost', 'passing_twoptm']	
 STAT_STRING_LIST_DEFENSE=['defense_sk', 'defense_int', 'defense_frec', 'defense_safe', 'defense_frec_tds', 'defense_int_tds', 'defense_misc_tds', 'kickret_tds','puntret_tds']
 TEAM_NAMES = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAC', 'KC', 'MIA', 'MIN', 'NE', 'NO', 'OAK', 'PHI', 'PIT', 'SD', 'SEA', 'SF', 'STL', 'TB', 'TEN', 'WAS', 'NYG', 'NYJ']
 
@@ -42,6 +42,7 @@ def genSeasonTeamStat(team_input, weeks):
 	stat_string_list = STAT_STRING_LIST
 	stat_season_totals =  [0 for x in range(len(stat_string_list))]
 	stat_season_totals_defense =  [0 for x in range(15)]
+	stat_season_totals_opponent = [0 for x in range(9)]
 	#Open File
 
 	json_data = {}
@@ -56,15 +57,21 @@ def genSeasonTeamStat(team_input, weeks):
 			stat_season_totals[index] +=stat	
 		# compute defense statistics
 		defenseJSON = showStatDefense(team_input, week)
+		opponentJSON= getOpponent(team_input,week)
 		#combine offense and defense
-		json_data[week] = dict( statJSON.items() + defenseJSON.items())
+		json_data[week] = dict( statJSON.items() + defenseJSON.items() + opponentJSON.items())
 		
 		#generate defense totals
 		list_defense = defenseJSON.items()				
 		for index in xrange(len(list_defense)):
 			stat_season_totals_defense[index] += list_defense[index][1]
+		#generate opponent totals			
+		list_opponent = opponentJSON.items()		
+		for index in xrange(len(list_opponent)):
+			if list_opponent[index][0] !='opponent':				
+				stat_season_totals_opponent[index] += list_opponent[index][1]
+		
 					
-	
 	#Aggregate Statistics 
 	statJSON= {}
 	statTotals = {}		
@@ -72,14 +79,19 @@ def genSeasonTeamStat(team_input, weeks):
 	for index in xrange(len(stat_string_list)):			
 		statTotals[stat_string_list[index]] = stat_season_totals[index]			
 		statJSON[stat_string_list[index]] = stat_season_totals[index]/float(weeks-1)
-
 		
 		#Generate Defensive Season Statistics 
 	defense_keys = defenseJSON.keys()
 	for index in xrange(len(defense_keys)):
 		statTotals[defense_keys[index]] = stat_season_totals_defense[index]		
 		statJSON[defense_keys[index]] = stat_season_totals_defense[index]/ float(weeks-1)		
-
+		#Genereae Opponent Season Statistics
+	opponent_keys = opponentJSON.keys()
+	for index in xrange(len(opponent_keys)):
+		statTotals[opponent_keys[index]] = stat_season_totals_opponent[index]		
+		statJSON[opponent_keys[index]] = stat_season_totals_opponent[index]/ float(weeks-1)		
+		
+		
 	json_data['AVG']= statJSON
 	json_data['TOTAL']=statTotals		
 	#print (statJSON)		
@@ -101,16 +113,17 @@ def printSeason(json_data, weeks):
 	# for key,value in json_data.items():
 		# print key, value
 	print "[[[[[[SEASON AVERAGE]]]]]]]"
-	list = json_data['AVG'].items()	
-	print list
+	for key, value in json_data['AVG'].iteritems():
+		print key, value
 	
 	print "[[[[[[SEASON TOTALS]]]]]]]"
-	list = json_data['TOTAL'].items()	
-	print list
+	for key, value in json_data['TOTAL'].iteritems():
+		print key, value
+		
 	for index in xrange(1,weeks+1):
 		print 'Week' + str(index) + '>>>>>>>>>>>>>>>>>>>>>'
-		for stuff in json_data[unicode(str(index))].items():
-			print stuff[0],stuff[1]
+		for key, value in json_data[index].iteritems():
+			print key, value
 
 def printSeasonTotals(json_data):
 	print "[[[[[[SEASON AVERAGE]]]]]]]"
@@ -182,41 +195,6 @@ def genPlayerSeasonJSON(player_ID, weeks):
 	#print statJSON
 	return statJSON
 	
-def getOpponent(team_input, week_input):
-	statJSON = {}
-	#STAT_STRING_LIST_DEFENSE=['defense_sk', 'defense_int', 'defense_frec', 'defense_safe', 'defense_frec_tds', 'defense_int_tds', 'defense_misc_tds', 'kickret_tds']
-	stat_string_list = STAT_STRING_LIST_DEFENSE	
-	stat_season_totals =  [0 for x in range(len(stat_string_list))]
-	#stat_string_list = ['puntret_tds']	
-	db = nfldb.connect()
-	q = nfldb.Query(db)
-	q.game(season_year=2012, season_type='Regular',  week=week_input, team=team_input)
-	
-	
-	for p in q.as_games():				
-		if p.away_team == team_input:
-			statJSON['points_allowed']= p.home_score
-			opponent = p.home_team
-		else:
-			statJSON['points_allowed']= p.away_score
-			opponent = p.home_team
-	#check for bye week all stats = 0
-	if len(q.as_games())==0:
-		team_home_away = 'bye'
-		for index in xrange(len(stat_string_list)):
-			statJSON[stat_string_list[index]] = 0
-			return statJSON
-	
-	for index in xrange(len(stat_string_list)):
-			stat = showStat(stat_string_list[index], team_input, week_input)
-			statJSON[stat_string_list[index]] = stat
-			#stat_season_totals[index] +=stat	
-	
-	statJSON['defense_touchdowns'] = statJSON['defense_int_tds'] + statJSON['defense_frec_tds'] + statJSON['defense_misc_tds']
-	#	for key, index in statJSON.items():	
-		#print ("Totals Week: " +str(week_input) + " " + team_input + " " + key+ " "+ str(index) + '\n')	
-	return statJSON
-
 	
 def showStatDefense(team_input, week_input):
 	statJSON = {}
@@ -239,7 +217,7 @@ def showStatDefense(team_input, week_input):
 		team_home_away = 'bye'
 		for index in xrange(len(stat_string_list)):
 			statJSON[stat_string_list[index]] = 0
-			return statJSON
+		return statJSON
 	
 	for index in xrange(len(stat_string_list)):
 			stat = showStat(stat_string_list[index], team_input, week_input)
@@ -260,7 +238,7 @@ def allTeamStatistics():
 		print "Generating", team
 		json_data[team] = genSeasonTeamStat(team,17)
 			
-	json_write = open('teamSeasonStatistics.json','w')
+	json_write = open('teamSeasonStatistics1.json','w')
 	json_write.write(json.dumps(json_data))
 	json_write.close()	
 
@@ -343,7 +321,43 @@ def createSeasonPlayerStats():
 	json_write.write(json.dumps(ff_league))
 	json_write.close()	
 
-		
+def getOpponent(team_input, week_input):
+	statJSON = {}
+	STAT_STRING_OPPONENT = ['passing_yds', 'passing_tds',  'rushing_yds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds','rushing_tds']	
+	stat_string_list = STAT_STRING_OPPONENT
+	stat_season_totals =  [0 for x in range(len(stat_string_list))]
+	#stat_string_list = ['puntret_tds']	
+	db = nfldb.connect()
+	q = nfldb.Query(db)
+	q.game(season_year=2012, season_type='Regular',  week=week_input, team=team_input)
+
+	#check for bye week all stats = 0
+	if len(q.as_games())==0:
+		team_home_away = 'bye'
+		statJSON['opponent']= 'bye'
+		for index in xrange(len(stat_string_list)):
+			statJSON[stat_string_list[index]+'_allowed'] = 0		
+		return statJSON
+	
+	for p in q.as_games():				
+		if p.away_team == team_input:
+			opponent = p.home_team
+		else:
+			opponent = p.away_team
+		statJSON['opponent'] = opponent
+		#print "Team: ", team_input, " has Opponent: ", opponent
+	
+	q.game(season_year=2012, season_type='Regular',  week=week_input, team=opponent)	
+	for p in q.as_games():					
+		for index in xrange(len(stat_string_list)):
+				stat = showStat(stat_string_list[index], opponent, week_input)
+				statJSON[stat_string_list[index]+'_allowed'] = stat
+				stat_season_totals[index] +=stat	
+	
+	#print statJSON
+	return statJSON
+
+	
 def main():
 	
 	#genSeasonTeamStat('SEA',17)
@@ -359,7 +373,7 @@ def main():
 	# for counter in xrange(len(temp)):
 		# print temp[counter]
 	
-	createSeasonPlayerStats()
+	#createSeasonPlayerStats()
 	#readFFRoster()
 	#>>>>>>>>>>>> Defense Stat
 	#showStatDefense( 'SF', 15)
@@ -367,5 +381,9 @@ def main():
 	#printSeason(readSeasonStat(),3)
 	#printSeasonTotals(readSeasonStat())
 	#allTeamStatistics()
+	#getOpponent('NE',9)
+	#temp = genSeasonTeamStat('SEA', 17)
+	#printSeason(temp,2)
+	print 'hi'
 if __name__ == "__main__":
 	main()

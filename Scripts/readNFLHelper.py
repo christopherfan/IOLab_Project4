@@ -1,7 +1,7 @@
 import json
 
 def readTeamSeasonStat():
-	json_file = open ('../Data/teamSeasonStatistics.json', 'r')
+	json_file = open ('../Data/teamSeasonStatistics1.json', 'r')
 	json_data = json.load(json_file)
 	season_json = {}
 			
@@ -27,14 +27,15 @@ def generateTeamStatCSV():
 		string_array = []		
 		for key_week, value_week in value_team.iteritems():
 			#print key_week
-			string = key_team + ','+key_week+','
-			string_array.append(string)
-			stat_names = ','.join(value_week.keys())
-			stats = ','.join(str(x) for x in value_week.values())
-			array.append(string + stats+'\n')
+			if key_week != 'TOTAL' and key_week !='AVG':
+				string = key_team + ','+key_week+','
+				string_array.append(string)
+				stat_names = ','.join(value_week.keys())
+				stats = ','.join(str(x) for x in value_week.values())
+				array.append(string + stats+'\n')
 	header_string = 'team_name' +','+'week'+ ','+stat_names	+'\n'
 		
-	file_write = open('teamCSV.txt','w')
+	file_write = open('teamCSV_new.txt','w')
 	print header_string
 	file_write.write(header_string)
 	for lines in array:	
