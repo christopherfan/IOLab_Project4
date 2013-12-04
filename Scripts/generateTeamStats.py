@@ -181,6 +181,41 @@ def genPlayerSeasonJSON(player_ID, weeks):
 		
 	#print statJSON
 	return statJSON
+	
+def getOpponent(team_input, week_input):
+	statJSON = {}
+	#STAT_STRING_LIST_DEFENSE=['defense_sk', 'defense_int', 'defense_frec', 'defense_safe', 'defense_frec_tds', 'defense_int_tds', 'defense_misc_tds', 'kickret_tds']
+	stat_string_list = STAT_STRING_LIST_DEFENSE	
+	stat_season_totals =  [0 for x in range(len(stat_string_list))]
+	#stat_string_list = ['puntret_tds']	
+	db = nfldb.connect()
+	q = nfldb.Query(db)
+	q.game(season_year=2012, season_type='Regular',  week=week_input, team=team_input)
+	
+	
+	for p in q.as_games():				
+		if p.away_team == team_input:
+			statJSON['points_allowed']= p.home_score
+			opponent = p.home_team
+		else:
+			statJSON['points_allowed']= p.away_score
+			opponent = p.home_team
+	#check for bye week all stats = 0
+	if len(q.as_games())==0:
+		team_home_away = 'bye'
+		for index in xrange(len(stat_string_list)):
+			statJSON[stat_string_list[index]] = 0
+			return statJSON
+	
+	for index in xrange(len(stat_string_list)):
+			stat = showStat(stat_string_list[index], team_input, week_input)
+			statJSON[stat_string_list[index]] = stat
+			#stat_season_totals[index] +=stat	
+	
+	statJSON['defense_touchdowns'] = statJSON['defense_int_tds'] + statJSON['defense_frec_tds'] + statJSON['defense_misc_tds']
+	#	for key, index in statJSON.items():	
+		#print ("Totals Week: " +str(week_input) + " " + team_input + " " + key+ " "+ str(index) + '\n')	
+	return statJSON
 
 	
 def showStatDefense(team_input, week_input):
