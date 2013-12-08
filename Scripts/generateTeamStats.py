@@ -1,4 +1,5 @@
 import nfldb, json
+import readNFLHelper
 
 STAT_STRING_LIST = ['passing_yds', 'passing_tds',  'passing_int', 'rushing_yds','rushing_tds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds', 'fumbles_lost', 'passing_twoptm']	
 STAT_STRING_LIST_DEFENSE=['defense_sk', 'defense_int', 'defense_frec', 'defense_safe', 'defense_frec_tds', 'defense_int_tds', 'defense_misc_tds', 'kickret_tds','puntret_tds']
@@ -243,7 +244,7 @@ def allTeamStatistics():
 	json_write.close()	
 
 def readTeamSeasonStat():
-	json_file = open ('teamSeasonStatistics.json', 'r')
+	json_file = open ('teamSeasonStatistics1.json', 'r')
 	json_data = json.load(json_file)
 	season_json = {}
 			
@@ -251,7 +252,7 @@ def readTeamSeasonStat():
 	return json_data	
 	
 def readFFRoster():
-	txt_file = open ('FFTeams.txt', 'r')
+	txt_file = open ('free_agents.txt', 'r')
 	json_data = {}
 	json_team = {}
 	counter = 0
@@ -277,7 +278,7 @@ def readFFRoster():
 	
 	txt_file.close()
 	
-	json_write = open('ffTeamsJSON.json','w')
+	json_write = open('freeagentsJSON.json','w')
 	json_write.write(json.dumps(json_data))
 	json_write.close()	
 	#print json_data
@@ -310,14 +311,16 @@ def createSeasonPlayerStats():
 			#print player['position'], player['player_name']
 			if( player['position'] != "DEF"):
 				player_search = searchPlayer(player['player_name'], player['position'])
+				player['team']=player_search.team
 				stats = genPlayerSeasonJSON(player_search.player_id, 17)
 				player['stats']= stats
+				player['ID'] = player_search.player_id
 			else:
 				stat = genSeasonTeamStat(player['player_name'],17)
 				player['stats'] = stat
 			
 	#print team_object
-	json_write = open('ffTeamsStatsJSON.json','w')
+	json_write = open('ffTeamsJSON_withID.json','w')
 	json_write.write(json.dumps(ff_league))
 	json_write.close()	
 
@@ -373,8 +376,9 @@ def main():
 	# for counter in xrange(len(temp)):
 		# print temp[counter]
 	
-	#createSeasonPlayerStats()
 	#readFFRoster()
+	# createSeasonPlayerStats()
+	print "foo"
 	#>>>>>>>>>>>> Defense Stat
 	#showStatDefense( 'SF', 15)
 	#genSeasonTeamStat('ARI',17)
@@ -383,7 +387,7 @@ def main():
 	#allTeamStatistics()
 	#getOpponent('NE',9)
 	#temp = genSeasonTeamStat('SEA', 17)
-	#printSeason(temp,2)
-	print 'hi'
+
+	
 if __name__ == "__main__":
 	main()

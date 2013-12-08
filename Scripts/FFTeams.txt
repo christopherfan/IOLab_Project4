@@ -13,7 +13,7 @@ WR	K. Stills
 TE	V. Davis
 TE	R. Gronkowski
 K	G. Hartley
-DEF	Patriots
+DEF	NE
 TEAM	Guanatos
 QB	M. Stafford
 QB	R. Wilson
@@ -29,7 +29,7 @@ WR	K. Allen
 WR	R. Randle
 TE	D. Walker
 K	P. Dawson
-DEF	Rams
+DEF	STL
 TEAM	Green Bay Pacman
 QB	C. Newton
 RB	K. Moreno
@@ -108,7 +108,7 @@ WR	S. Smith
 WR	J. Boykin
 TE	C. Clay
 K	M. Prater
-DEF	Cardinals
+DEF	ARI
 DEF	DAL
 TEAM	BOSS MARTINFL
 QB	A. Smith
@@ -140,7 +140,7 @@ WR	H. Douglas
 WR	E. Sanders
 TE	T. Gonzalez
 K	S. Gostkowski
-DEF	Chiefs
+DEF	KC
 DEF	CAR
 TEAM	lo que sea
 QB	N. Foles
@@ -156,5 +156,5 @@ WR	J. Edelman
 WR	R. White
 TE	J. Thomas
 K	S. Hauschka
-DEF	Seahawks
+DEF	SEA
 DEF	DEN
