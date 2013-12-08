@@ -17,7 +17,7 @@ def main():
 	print "Example of how to call this function and print statements to show return type"
 	team_name = 'Cowboys'
 	week = 11
-	answer = generatePlayerRecommendations(team_name, week) ## Team name is 'Wait for it' doing analysis for week 5
+	answer = generatePlayerRecommendations(team_name, week) ## Team name is 'Cowboys' doing analysis for week 11
 	print "Recommendations for Team: ", team_name, " for week: " , week
 	## Print the sorted list of current FF Team players and the score
 	ffPlayerRanks = answer['ffTeamRank'] 			## Do this because the return value is a tuple 
