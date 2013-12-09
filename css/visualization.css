@@ -1,0 +1,71 @@
+
+div.totalComparisonGraph
+{
+	display: inline-block;
+	margin-top: 20px;
+
+}
+
+#statButtons
+{
+	top:-90px;
+	margin:0px;
+
+}
+
+
+line 	{fill:none; stroke:#ccc; stroke-width:1px;}
+
+rect.lineYds
+{
+	opacity:.7;
+}
+
+rect.lineYds:hover	
+{
+	opacity: 1;
+}
+
+.BMarshall	{fill: Black;}
+.CJohnson	{fill: RoyalBlue;}
+.MWallace 	{fill: MediumTurquoise;}
+
+#ydsChart
+{
+	background-color: "Whitesmoke";
+	background-image: url(nflfantasy.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+
+}
+
+.axis path, .axis line
+{
+	fill:none;
+	stroke: black;	
+	shape-rendering:crispEdges;
+}
+
+.axis
+{
+	font-size:8pt;
+	font-family:Tahoma, Geneva, sans-serif;	
+}
+
+
+.axis text
+{
+	
+	font-weight: bold;
+	color:gray;
+	stroke: silver;
+	stroke-width: .2px;
+	fill: DimGray; 
+	background-color: white;
+}
+
+.tick
+{
+	fill:none;
+	stroke:black;	
+}
