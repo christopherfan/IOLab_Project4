@@ -145,36 +145,6 @@ def generateScore(player, week, nfl):
 		player_score +=player_average['fumbles_lost']
 	return player_score
 	
-def teamMagnify(opponent_team,nfl,  week):
-
-	STAT_STRING_OPPONENT = ['passing_yds', 'passing_tds',  'rushing_yds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds','rushing_tds']	
-	# opponent_average = averageTeam(nfl[opponent_team], week)		
-	avgNFL = nflAvg(nfl,week)
-	
-	teamScore = 0
-	avgScore = 0
-		
-	if opponent_team != 'bye':		
-		opponent_average = averageTeam(nfl[opponent_team], week)		
-		print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%", opponent_team, week
-		ppPrint(opponent_average)
-	else:
-		return 0
-		
-	for stat in STAT_STRING_OPPONENT:	
-		new_stat = stat+'_allowed'
-		print ">>>>Stat: ", new_stat , " Team: ", opponent_average[new_stat], " League: ", avgNFL[new_stat]
-		team = convertFFPoints(stat, opponent_average[new_stat])
-		league = convertFFPoints(stat, avgNFL[new_stat])
-		teamScore += team
-		avgScore += league
-		print "Stat: ", new_stat , " Team: ", team, " League: ", league 
-	
-	print "Team Stats: ", teamScore
-	print "NFL Stats ", avgScore
-	magnify = (teamScore/float(8)) / (avgScore/float(8))
-	print "The magnify for team: ", opponent_team, " is: ", magnify
-		
 	
 	
 def formula(player_statistic, team_statistic, stat_name, avg):
@@ -224,7 +194,10 @@ def averageTeam(team_json, till_week):
 		
 	for key,value in running_average.iteritems():
 		if isinstance(value,int):
-			running_average[key] = value/float(games_played)
+			# print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",key, value
+			temp = value/float(games_played)
+			# print "                           >>>>>>>>>>>>>>>>>>",key, temp
+			running_average[key] = temp 
 	# print "Averages: "
 	# ppPrint(running_average)		
 	# print " Games Played: " , games_played
@@ -395,11 +368,62 @@ def tester():
 	nfl = readTeamSeasonStat()
 	# print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>NFL"
 	# ppPrint(nflAvg(nfl, 12))
+	
+	
+	# ppPrint(averageTeam(nfl['CHI'],12))
+	# teamMagnify('CHI',nfl, 12)
 	print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TEAM"
 	# averageTeam(nfl['CHI'],12)
-	ppPrint(averageTeam(nfl['CHI'],12))
-	teamMagnify('CHI',nfl, 12)
+	wtf('SEA', nfl, 16)
 	print "foo"
 
+def wtf(team, nfl, week):
+	STAT_STRING_OPPONENT = ['passing_yds', 'passing_tds',  'rushing_yds','receiving_yds', 'receiving_tds' ,'kickret_tds', 'fumbles_rec_tds','rushing_tds']	
+
+	print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%", team, week
+	current_team = averageTeam(nfl[team], week)
+	# ppPrint(current_team)
+	
+
+	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NFL Average"
+	avgNFL = nflAvg(nfl,week)
+	ppPrint(avgNFL)
+	
+	
+	teamScore = 0
+	avgScore = 0
+
+	# for stat in STAT_STRING_OPPONENT:	
+		# new_stat = stat+'_allowed'
+		# print ">>>>Stat: ", new_stat , " Team: ", current_team[new_stat], " League: ", avgNFL[new_stat]
+		# team = convertFFPoints(stat, current_team[new_stat])
+		# league = convertFFPoints(stat, avgNFL[new_stat])
+		# teamScore += team
+		# avgScore += league
+		# print "Stat: ", new_stat , " Team: ", team, " League: ", league 
+	
+	# print "Team Stats: ", teamScore
+	# print "NFL Stats ", avgScore
+	
+def teamMagnify(opponent_team,nfl,  week):
+
+	
+		
+	if opponent_team != 'bye':		
+		opponent_average = averageTeam(nfl[opponent_team], week)		
+		
+		ppPrint(opponent_average)
+	else:
+		return 0
+		
+
+	print "Team Stats: ", teamScore
+	print "NFL Stats ", avgScore
+	magnify = (teamScore/float(8)) / (avgScore/float(8))
+	print "The magnify for team: ", opponent_team, " is: ", magnify
+
+	
+	
+	
 if __name__ == "__main__":
 	tester()
