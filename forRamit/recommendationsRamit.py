@@ -529,14 +529,14 @@ def roster(tuple):
 		if players_playing <8:		
 			if(player[1][2] =='QB' and qb_count ==1):			
 				if player[0] == 'team':
-					final_roster.append(('keep_bench', ('team',)+player[1]+('Keep_bench',)))
+					final_roster.append(('keep_bench', ('team',player[1]+('Keep_bench',))))
 					players_added+=1
 				continue
 			elif(player[1][2]=='QB'):
 				qb_count +=1		
 			if(player[1][2] =='WR' and wr_count ==2):
 				if player[0] == 'team':
-					final_roster.append(('keep_bench', ('team',) +player[1]+('Keep_bench',)))				
+					final_roster.append(('keep_bench', ('team', player[1]+('Keep_bench',))))
 					players_added+=1
 				continue
 			elif(player[1][2]=='WR'):
@@ -544,23 +544,23 @@ def roster(tuple):
 								
 			if player[0] =='team':
 				# final_roster.append(player + ('Keep_Play',))
-				final_roster.append(('keep_play', ('team',) +player[1]+('Keep_play',)))
+				final_roster.append(('keep_play', ('team', player[1]+('Keep_play',))))
 				team_reverse.pop
 				players_playing+=1
 			else:
 				worse_player = team_reverse[0]
 				team_reverse.pop(0)
 				# final_roster.append(worse_player + ('Drop_Play', player))
-				final_roster.append(('drop_play', ('team',)+worse_player+('drop_play',),  player))
+				final_roster.append(('drop_play',      ('team',(worse_player+('drop_play',))),      player))
 				players_playing+=1
 		else:
 			if player[0] =='team':
-				final_roster.append(('keep_bench', ('team',) +(player[1]+('Keep_bench',))))
+				final_roster.append(('keep_bench', ('team', (player[1]+('Keep_bench',)))))
 				team_reverse.pop
 			else:
 				worse_player = team_reverse[0]
 				team_reverse.pop(0)
-				final_roster.append(('drop_bench', ('team',)+ worse_player+('drop_bench',), player))
+				final_roster.append(('drop_bench', ('team', (worse_player+('drop_bench',))), player))
 		players_added +=1
 		
 	# print "%%%%%%%% Final RESULT>>>>>>>>>>>>>>>>>>>>.." 		
@@ -571,7 +571,8 @@ def roster(tuple):
 	for stuff in final_roster:
 		status = stuff[0]
 		if status == 'keep_play' or status == 'keep_bench':
-			next_player = (findNext(team_rank, stuff[1]),)	
+			
+			next_player = (findNext(team_rank, stuff[1][1]),)	
 			compareTo = (('team',) + next_player)
 			
 			blah = stuff  + (compareTo,)
@@ -586,8 +587,8 @@ def roster(tuple):
 	return final_output
 			
 def findNext(roster, player):
-	position = player[3]
-	player_score = player[4]
+	position = player[2]
+	player_score = player[3]
 	last_person = ('none',)
 	for person in roster:		
 		if person[2] == position: 
