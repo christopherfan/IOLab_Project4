@@ -6,7 +6,7 @@ function playerSelection()
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		var playerA = team[7];
+		var playerA = team[9];
 		var playerB = team[8];
 
 		playerComparisonFantasy(playerA,playerB);
@@ -25,7 +25,7 @@ function statSelection(stat)
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		playerComparisonBars(team[7],team[8],stat,10);
+		playerComparisonBars(team[9],team[8],stat,10);
 	});
 }
 
@@ -388,7 +388,7 @@ function setFantasyComparisonParameters(chart,playerA,playerB)
 				"width":chartWidth,
 				"height":chartHeight
 			});
-	console.log(playerA);
+	//console.log(playerA);
 	var xMax = 0;
 	if(playerA.fantasyStats.TOTAL.total >= playerB.fantasyStats.TOTAL.total)
 	{	
@@ -399,7 +399,7 @@ function setFantasyComparisonParameters(chart,playerA,playerB)
 		xMax = playerB.fantasyStats.TOTAL.total;
 	}
 	xTicks = (xMax+(20-(xMax%20)))/20;
-	console.log(xTicks);
+	//console.log(xTicks);
 
 	// Creating the scales and axis for the chart
 	var xScale = d3.scale.linear()
@@ -409,16 +409,6 @@ function setFantasyComparisonParameters(chart,playerA,playerB)
 	var yScale = d3.scale.linear()
 					.range([chartHeight+20,20])
 					.domain([1,6]);
-
-	// console.log(chartWidth);
-	// console.log(xScale(100));
-	// console.log(xScale(220));
-	// console.log(xScale(216));
-
-	// console.log(chartHeight);
-	// console.log(yScale(1));
-	// console.log(yScale(3));
-	// console.log(yScale(6));
 	
 	var xAxis = d3.svg.axis()
 					.scale(xScale)
@@ -431,63 +421,184 @@ function setFantasyComparisonParameters(chart,playerA,playerB)
 		.selectAll("text")
 			//.attr("transform","translate("+(chartWidth/(xTicks))+",0)");
 
-	// var yAxis = d3.svg.axis()
-	// 				.scale(yScale)
-	// 				.orient("left")
-	// 				.ticks(yTicks);
-
 	return {x:xScale,y:yScale,"max":xMax,chartHeight:chartHeight,chartWidth:chartWidth,margin:{xMargin:xMargin,yMargin:yMargin}};
 }
 
 function playerComparisonFantasy(playerA, playerB)
 {
+	//console.log(playerA);
 	playerA = addFantasyTotals(playerA);
 	playerB = addFantasyTotals(playerB);
 
-	var chartA = d3.select("#playerA")
-		.attr("class","totalComparisonGraph")
-		.style("margin-left","10px")
-		.append("svg");
+
+	 d3.select("body").append("svg")
+	 				.attr("class","timeline")
+					.attr("width", 1000)
+					.attr("height", 200)
+					//.style("background-color","black")
+					.style("margin-top","10px");
+	
+	d3.select("svg.timeline")
+		.selectAll("circle")
+		.data(getFantasyTotal(playerA.fantasyStats))
+		.enter()
+		.append("circle")
+			.attr("class","p1");
 			
-	var params = setFantasyComparisonParameters(chartA,playerA,playerB);
-	playerComparisonFantasyBreakdown(chartA,playerA,0,params);
+	d3.select("svg.timeline")
+		.selectAll("circle.p2")
+		.data(getFantasyTotal(playerB.fantasyStats))
+		.enter()
+		.append("circle")
+			.attr("class","p2");
 
+	var xScale = d3.scale.linear()
+							.range([30,980])
+							.domain([0,17]);
+			
+	var yScale = d3.scale.linear()
+					.range([180,20])
+					.domain([0,30]);
 
+	console.log(getMax(playerA,playerB,'total',17));
 
+	// d3.selectAll("circle")
+	// 	.attr("cx",function(d,i)
+	// 	{
+	// 		return xScale(i);	
+	// 	})
+	// 	.attr("cy", function(d)
+	// 	{
+	// 		return yScale(d);
+	// 	})
+	// 	.attr("r",3)
 
+	var line = d3.svg.line()
+					.x(function(d,i)
+					{	
+						return xScale(i);	
+					})
+					.y(function(d,i)
+					{
+						return yScale(d);	
+					});
 
+	d3.select("svg.timeline")
+		.append("path")
+		.attr("d",line(getFantasyTotal(playerA.fantasyStats)))
+		.attr("class","p1");
 
-	var chartB = d3.select("#playerB")
-		.attr("class","totalComparisonGraph")
-		.append("svg");
+	d3.select("svg")
+		.append("path")
+		.attr("d",line(getFantasyTotal(playerB.fantasyStats)))
+		.attr("class","p2");
 
-	setFantasyComparisonParameters(chartB,playerA,playerB);
+	var xAxis = d3.svg.axis().scale(xScale).ticks(18);
+			d3.select("svg.timeline")
+				.append("g")
+				.attr("class","x axis")
+				.attr("transform","translate(0,180)")
+				.call(xAxis);	
+				
+	var yAxis = d3.svg.axis().scale(yScale).orient("left");
+			d3.select("svg")
+				.append("g")
+				.attr("class","y axis")
+				.attr("transform","translate(30,0)")
+				.call(yAxis);
+
+	/*
+		// var chartA = d3.select("#playerA")
+		// 	.attr("class","totalComparisonGraph")
+		// 	.style("margin-left","10px")
+		// 	.append("svg")
+		// 		;
+				
+		// var params = setFantasyComparisonParameters(chartA,playerA,playerB);
+
+		// chartA.selectAll("div.line")
+		// 			.data(playerA.fantasyStats)
+		// 			.enter()
+		// 			.append("div")
+		// 				.attr("class","line");
+
+		//playerComparisonFantasyBreakdown(chartA,playerA,0,params);
+
+		// var chartB = d3.select("#playerB")
+		// 	.attr("class","totalComparisonGraph")
+		// 	.append("div");
+
+		// setFantasyComparisonParameters(chartB,playerA,playerB);
+	*/
 }
 
 function playerComparisonFantasyBreakdown(chart,player,playerTurn,params)
 {
 	//console.log(chart);
-	var barWidth = 50;
+	var barHeight = 50;
 
-	var lines = chart.selectAll("rect.fantasyTotal.player"+playerTurn+"."+player.player_name.split(" ").join("").split(".").join(""))
-						.data(player)
+	// var lines = chart.selectAll("rect.fantasyTotal.player"+playerTurn+"."+player.player_name.split(" ").join("").split(".").join(""))
+	// 					.data(player)
+	// 					.enter()
+	// 					.append("rect")
+	// 						.attr("class","fantasyTotal player"+playerTurn+" "+ player.player_name.split(" ").join("").split(".").join(""));
+
+	var lines = d3.select("body").select('div#playerA')
+					.selectAll("rect.horizontalBar")
+						.data(player.fantasyStats)
 						.enter()
 						.append("rect")
-							.attr("class","fantasyTotal player"+playerTurn+" "+ player.player_name.split(" ").join("").split(".").join(""));
+							.attr("class","horizontalBar");
+
+	console.log(d3.select('#playerA'));
 
 	var xScale = params.x;
 	var yScale = params.y;
 
-	lines.attr(
+	//console.log(lines);
+	// lines.attr(
+	// 	{
+	// 		"height": "100px",
+	// 		"width": "100px",
+	// 		"y": "100px",
+	// 		"x": "50px"
+	// 	})
+
+		lines.attr(
 		{
-			"height": barWidth,
-			"width": 100,
-			// "x": function(d,i)
-			// {
-			// 	return xScale(d);	
-			// },
-			"y": params.chartHeight+20,
+			"x": params.chartWidth-10,
+			"y": function(d,i)
+			{
+				return i * barHeight;
+			},
+			"height": barHeight,
+			"width": function (d,i)
+			{
+				return xScale(d.TOTAL.receiving_yds);
+			}
 		})
+
+	chart.selectAll('text.horizontalBar')
+			.data(player)
+			.enter()
+			.append("text")
+				.attr("class","horizontalBar")
+			.text(function(d)
+			{
+				return d.yards;
+			})
+			.attr(
+			{
+				"x": function(d,i)
+				{
+					return (xScale(i+1)+(playerTurn*barWidth))+1;	
+				},
+				"y":function(d,i)
+				{
+					return yScale(d.yards)-5;
+				},
+				"font-size":"12"
+			});
 }
 
 function fantasyScore(stat,value)
@@ -532,6 +643,26 @@ function fantasyScore(stat,value)
 	}
 }
 
+function getFantasyTotal(stats)
+{
+	var total=[];
+	$.each(stats, function(i,item)
+	{
+		console.log(item);
+		if(i!=0)
+		{
+			total[i]=item.total;
+		}
+		else
+		{
+			total[i]=0;
+		}
+	});
+	console.log("total: " +total);
+	return total;
+
+}
+
 /*
 	Function that calculates the fantasy points for a specific player in every category for everyweek. It also calculates the total points by a player in a week and in total for the season.
 
@@ -544,7 +675,7 @@ function fantasyScore(stat,value)
 function addFantasyTotals(playerStats)
 {
 	var total;
-	var fantasy={};
+	var fantasy=[];
 	$.each(playerStats.stats, function(i,item)
 	{
 		total = {};
@@ -558,8 +689,9 @@ function addFantasyTotals(playerStats)
 		total['total'] = weekTotal;
 		fantasy[i] =total;
 	})
-	playerStats["fantasyStats"] = fantasy;
+	playerStats['fantasyStats'] = fantasy;
 
+	console.log(playerStats);
 	return playerStats;
 }
 

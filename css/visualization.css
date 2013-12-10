@@ -1,4 +1,45 @@
 
+circle
+{
+	stroke: black;
+	stroke-width:0.5px;
+	opacity: 0.8;	
+	
+}
+
+circle.dnp
+{
+	fill:DarkRed;
+}
+
+circle.p1
+{
+	fill:RoyalBlue;
+}
+
+circle.p2
+{
+	fill:Orange;
+}
+
+path.p1
+{
+	stroke: RoyalBlue;
+}
+
+path.p2
+{
+	stroke: Orange;
+}
+
+path
+{
+	fill:none;
+	stroke: 3px;	
+}
+
+
+
 div.totalComparisonGraph
 {
 	display: inline-block;
@@ -8,11 +49,15 @@ div.totalComparisonGraph
 
 #statButtons
 {
-	top:-90px;
+	
 	margin:0px;
 
 }
 
+div.line 
+{
+
+}
 
 line 	{fill:none; stroke:#ccc; stroke-width:1px;}
 
