@@ -1,8 +1,8 @@
-import json, nfldb
+import json
 
 ####Generate Recommendation
 def readFFTeamsStats():
-	json_file = open ('../Data/ffTeamsStatistics_final.json', 'r')
+	json_file = open ('ffTeamsStatistics_final.json', 'r')
 	json_data = json.load(json_file)
 	season_json = {}
 			
@@ -10,7 +10,7 @@ def readFFTeamsStats():
 	return json_data		
 
 def readTeamSeasonStat():
-	json_file = open ('../Data/teamSeasonStatistics_final.json', 'r')
+	json_file = open ('teamSeasonStatistics_final.json', 'r')
 	json_data = json.load(json_file)
 	season_json = {}
 			
@@ -18,7 +18,7 @@ def readTeamSeasonStat():
 	return json_data		
 
 def readFreeAgentsStats():
-	json_file = open ('../Data/freeagentsStatistics_final.json', 'r')
+	json_file = open ('freeagentsStatistics_final.json', 'r')
 	json_data = json.load(json_file)
 	season_json = {}			
 	json_file.close()
@@ -90,7 +90,7 @@ def generateRecommendation(ff_team, week, nfl):
 			
 		# scoreList.append=(value_player['player_name'], score)
 	
-	scoreList = sorted(scoreList, key = lambda x: x[2], reverse=True)	
+	scoreList = sorted(scoreList, key = lambda x: x[3], reverse=True)	
 	# print scoreList
 	return scoreList
 	
@@ -401,5 +401,5 @@ def tester():
 	teamMagnify('CHI',nfl, 12)
 	print "foo"
 
-if __name__ == "__main__":
-	tester()
+# if __name__ == "__main__":
+	# tester()
