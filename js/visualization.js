@@ -1,17 +1,33 @@
 
 
+var playerA;
+var playerB;
 function playerSelection()
 {
 	d3.json("Data/ffTeamsStatsJSON.json",function(error,json)
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		var playerA = team[9];
-		var playerB = team[8];
+		playerA = team[6];
+		playerB = json['lo que sea'][2];
 
-		playerComparisonFantasy(playerA,playerB);
+		playerComparison();
+		//playerComparisonFantasy(playerA,playerB);
 	});
 }
+
+
+function playerComparison()
+{
+
+	$("#playerA img").attr('src',"img/"+playerA.player_name.split(" ").join("").split(".").join("")+".jpg");
+
+	$("#playerB img").attr('src',"img/"+playerB.player_name.split(" ").join("").split(".").join("")+".jpg");
+
+	$("#statButtons");
+	playerComparisonFantasy();
+	//playerComparisonBars();
+}	
 
 /*
 	Function used when selection a stat the user wants to breakdown on a bar chart per week.
@@ -25,7 +41,7 @@ function statSelection(stat)
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		playerComparisonBars(team[9],team[8],stat,10);
+		playerComparisonBars(stat,10);
 	});
 }
 
@@ -116,7 +132,7 @@ function getPlayerStats(player,statName,weeks)
 				- chartWidth: width of the chart,
 				- margin: Object with the values for the x and y margins used to render the char (xMargin, yMargin)
 */
-function setComparisonParameters(stat,weeks,playerA,playerB,chart,height,width)
+function setComparisonParameters(stat,weeks,chart,height,width)
 {
 	chart.style("background-color","WhiteSmoke")
 
@@ -133,7 +149,7 @@ function setComparisonParameters(stat,weeks,playerA,playerB,chart,height,width)
 	var yTicks=0;
 	var unit='';
 	console.log(stat);
-	var maxStat = getMax(playerA,playerB,stat,weeks);
+	var maxStat = getMax(stat,weeks);
 
 	// Defining the label of the Y Axis based on the stat
 	if(stat.search("passing")!=-1)
@@ -232,7 +248,7 @@ function setComparisonParameters(stat,weeks,playerA,playerB,chart,height,width)
 	return {x:xScale,y:yScale,"max":yMax,chartHeight:chartHeight,chartWidth:chartWidth,margin:{xMargin:xMargin,yMargin:yMargin}, height:chartHeight};
 }
 
-function getMax(playerA,playerB,statName,week)
+function getMax(statName,week)
 {
 	var maxA = getMaxStats(playerA,statName,week);
 	var maxB = getMaxStats(playerB,statName,week);
@@ -303,7 +319,7 @@ function getMaxStats(playerStats,statName,week)
 		playersA: JSON object with the statistics of the players to compare
 		playersB: JSON object with the statistics of the players to compare
 */
-function playerComparisonBars(playerA,playerB,stat,weeks)
+function playerComparisonBars(stat,weeks)
 {	
 	d3.select("body").select("#graphs").insert("div",":first-child")
 						.attr("class","nflBackground")
@@ -316,7 +332,7 @@ function playerComparisonBars(playerA,playerB,stat,weeks)
 							//.style("background-color","black")
 							.style("margin","10px");
 
-	var params = setComparisonParameters(stat,weeks,playerA,playerB,ydsChart,200,900);
+	var params = setComparisonParameters(stat,weeks,ydsChart,200,900);
 	
 	var aStats = getPlayerStats(playerA,stat,weeks);
 	var bStats = getPlayerStats(playerB,stat,weeks);
@@ -374,7 +390,7 @@ function playerComparisonBreakdown(chart,player,playerName,playerTurn,params)
 			});
 }
 
-function setFantasyComparisonParameters(chart,playerA,playerB)
+function setFantasyComparisonParameters(chart)
 {
 
 	var chartWidth = 375;
@@ -424,7 +440,7 @@ function setFantasyComparisonParameters(chart,playerA,playerB)
 	return {x:xScale,y:yScale,"max":xMax,chartHeight:chartHeight,chartWidth:chartWidth,margin:{xMargin:xMargin,yMargin:yMargin}};
 }
 
-function playerComparisonFantasy(playerA, playerB)
+function playerComparisonFantasy()
 {
 	//console.log(playerA);
 	playerA = addFantasyTotals(playerA);
