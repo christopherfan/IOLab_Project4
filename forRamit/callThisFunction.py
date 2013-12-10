@@ -15,8 +15,8 @@ from recommendationsRamit import *
 
 def main():
 	print "Example of how to call this function and print statements to show return type"
-	team_name = 'Guanatos'
-	week = 6
+	team_name = 'Wait for it'
+	week = 11
 	answer = generatePlayerRecommendations(team_name, week) ## Team name is 'Cowboys' doing analysis for week 11
 	print "Recommendations for Team: ", team_name, " for week: " , week
 	## Print the sorted list of current FF Team players and the score
