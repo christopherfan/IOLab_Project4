@@ -21,4 +21,5 @@ https://github.com/BurntSushi/nfldb/wiki
 Link to Demo Version:
 
 List of Known Bugs:
+We do not have pictures for all players. 
 
