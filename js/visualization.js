@@ -2,32 +2,111 @@
 
 var playerA;
 var playerB;
-function playerSelection()
+function playerSelection(player1,player2)
 {
-	d3.json("Data/ffTeamsStatsJSON.json",function(error,json)
+	//d3.select('body').style("background-color","WhiteSmoke");
+	d3.json("Data/ffTeamsStatistics_Final.json",function(error,json)
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		playerA = team[6];
-		playerB = json['lo que sea'][2];
-
+		playerA = team[0];
+		playerB = team[6];
 		playerComparison();
-		//playerComparisonFantasy(playerA,playerB);
+		playerComparisonFantasy(playerA,playerB);
 	});
 }
 
 
+
+
 function playerComparison()
 {
+	//$("#playerA img").attr('src',"img/"+playerA.player_name.split(" ").join("").split(".").join("")+".jpg");
+	$("#playerA").css("background-image","url(img/"+playerA.player_name.split(" ").join("").split(".").join("")+".jpg)")	
+	
+	console.log(playerA.team);
+	$("#playerA div.playerName").text(playerA.player_name);
+	$("#playerA div.recomendation span.position_cat").text(playerA.position);
+	$("#playerA div.recomendation img").attr("src","http://i.nflcdn.com/static/site/5.17/img/logos/teams-matte-80x53/"+playerA.team+".png");
+	$("#playerA div.recomendation span.scoring").text(50.1);
+	
 
-	$("#playerA img").attr('src',"img/"+playerA.player_name.split(" ").join("").split(".").join("")+".jpg");
 
-	$("#playerB img").attr('src',"img/"+playerB.player_name.split(" ").join("").split(".").join("")+".jpg");
+	//$("#playerB img").attr('src',"img/"+playerB.player_name.split(" ").join("").split(".").join("")+".jpg");
+	$("#playerB").css("background-image","url(img/"+playerB.player_name.split(" ").join("").split(".").join("")+".jpg)");
 
-	$("#statButtons");
-	playerComparisonFantasy();
+	$("#playerB div.playerName").text(playerB.player_name);
+	$("#playerB div.playerName").text(playerB.player_name);
+	$("#playerB div.recomendation span.position_cat").text(playerB.position);
+	$("#playerB div.recomendation img").attr("src","http://i.nflcdn.com/static/site/5.17/img/logos/teams-matte-80x53/"+playerB.team+".png");
+
+	$("#playerB div.recomendation span.scoring").text(39.1);
+	
+	categoryWinners();
+	
 	//playerComparisonBars();
 }	
+
+function setCategoryWinners(stat,week)
+{
+	var a = getStatTotal(playerA,stat,week);
+	var b = getStatTotal(playerB,stat,week);
+	var team ='';
+
+	if (a == 0 && b == 0)
+	{
+		$("#"+stat+"_cat").hide();
+	} 
+	else
+	{
+		if (a>b)
+		{
+			team = playerA.team;	
+		}
+		else
+		{
+			team = playerB.team;
+		}
+		$("#"+stat+"_cat" + " img").attr("src","http://i.nflcdn.com/static/site/5.17/img/logos/teams-matte-80x53/"+team+".png")
+	}
+	
+
+	console.log($("#"+stat+"_cat"));
+	
+	// console.log(getMax('receiving_yds',10));
+
+	// console.log(getStatTotal(playerA,'receiving_yds',10));
+	// console.log(getStatTotal(playerB,'receiving_yds',10));
+}
+
+function categoryWinners()
+{
+	setCategoryWinners('passing_yds',10);
+	setCategoryWinners('passing_tds',10);
+	setCategoryWinners('receiving_yds',10);
+	setCategoryWinners('receiving_tds',10);
+	setCategoryWinners('rushing_tds',10);
+	setCategoryWinners('rushing_yds',10);
+}
+
+function statFantasySelection()
+{
+	playerComparisonFantasy();
+}
+
+function getStatTotal(player,stat,week)
+{
+	var total =0;
+	$.each(player.stats, function(i,item)
+	{
+		if(i <=week)
+		{
+			total+= item[stat];
+		}
+	});
+	return total;
+
+}
 
 /*
 	Function used when selection a stat the user wants to breakdown on a bar chart per week.
@@ -37,12 +116,7 @@ function playerComparison()
 */
 function statSelection(stat)
 {
-	d3.json("Data/ffTeamsStatsJSON.json",function(error,json)
-	{
-		console.log(json);
-		var team = json['Wait for it'];
-		playerComparisonBars(stat,10);
-	});
+	playerComparisonBars(stat,10);
 }
 
 
@@ -134,7 +208,7 @@ function getPlayerStats(player,statName,weeks)
 */
 function setComparisonParameters(stat,weeks,chart,height,width)
 {
-	chart.style("background-color","WhiteSmoke")
+	//chart.style("background-color","WhiteSmoke")
 
 	//Creating the parameters for the chart
 	var chartWidth = width;
@@ -167,8 +241,8 @@ function setComparisonParameters(stat,weeks,chart,height,width)
 
 	if(stat.search("tds")!=-1)
 	{
-		yMax = maxStat;
-		yTicks = maxStat
+		yMax = maxStat+1;
+		yTicks = maxStat+1
 		unit+= "Touchdowns"
 	}
 	else if (stat.search("yds")!=-1)
@@ -312,6 +386,26 @@ function getMaxStats(playerStats,statName,week)
 	return max;
 }
 
+function getTitle(stat)
+{
+	console.log(stat)
+	var title = "";
+	if(stat.search("receiving")!=-1)
+		title = "Receiving";
+	else if(stat.search("passing")!=-1)
+		title = "Passing";
+	else
+		title = "Rushing";
+
+	if(stat.search("tds")!=-1)
+		title += " Touchdowns";
+	else
+		title += " Yards";
+
+	return title;
+
+}
+
 /*
 	Function used to compare two players for a specific statistic or metric with a Bar Graph.
 
@@ -322,40 +416,44 @@ function getMaxStats(playerStats,statName,week)
 function playerComparisonBars(stat,weeks)
 {	
 	d3.select("body").select("#graphs").insert("div",":first-child")
-						.attr("class","nflBackground")
-						.attr("id",stat);
+						.attr("class","nflGraph")
+						.attr("id",stat)
+						.append("div")
+							.attr("class","sectionTitle")
+							.text(getTitle(stat));
 
 	var ydsChart = d3.select("#"+stat)
 						.append("svg")
 							// .attr("width",900)
 							// .attr("height",350)
 							//.style("background-color","black")
-							.style("margin","10px");
+							//.style("margin","10px");
 
 	var params = setComparisonParameters(stat,weeks,ydsChart,200,900);
 	
 	var aStats = getPlayerStats(playerA,stat,weeks);
 	var bStats = getPlayerStats(playerB,stat,weeks);
 	
-	playerComparisonBreakdown(ydsChart,aStats,playerA.player_name,0,params);
-	playerComparisonBreakdown(ydsChart,bStats,playerB.player_name,1,params);
+	playerComparisonBreakdown(ydsChart,aStats,playerA.player_name,playerA.team,0,params);
+	playerComparisonBreakdown(ydsChart,bStats,playerB.player_name,playerB.team,1,params);
 	
 	redoStats(ydsChart,aStats,bStats,params);
 }
 
-function playerComparisonBreakdown(chart,player,playerName,playerTurn,params)
+function playerComparisonBreakdown(chart,player,playerName,team,playerTurn,params)
 {
 	
 	var barWidth =(((params.chartWidth - params.margin.xMargin)/player.length)/2)-10;
-	var lines = chart.selectAll("rect.lineYds.player"+playerTurn+"."+playerName.split(" ").join("").split(".").join(""))
+	var lines = chart.selectAll("rect.lineYds.player"+playerTurn+"."+team)
 						.data(player)
 						.enter()
 						.append("rect")
-							.attr("class","lineYds player"+playerTurn+" "+ playerName.split(" ").join("").split(".").join(""));
+							.attr("class","lineYds player"+playerTurn+" "+team);
 
 	var xScale = params.x;
 	var yScale = params.y;
 
+	
 	lines.attr(
 		{
 			"height": 0,
@@ -367,11 +465,12 @@ function playerComparisonBreakdown(chart,player,playerName,playerTurn,params)
 			"y": params.chartHeight+20,
 		})
 
-	chart.selectAll('text.'+playerName.split(" ").join("").split(".").join(""))
+	chart.selectAll('text.'+team)
 			.data(player)
 			.enter()
 			.append("text")
-				.attr("class",playerName.split(" ").join("").split(".").join(""))
+				//.attr("class",playerName.split(" ").join("").split(".").join(""))
+				.attr("class",team)
 			.text(function(d)
 			{
 				return d.yards;
@@ -399,7 +498,7 @@ function setFantasyComparisonParameters(chart)
 	var yMargin = 10;
 
 	chart.style("display","inline-block")
-			.style("background-color","WhiteSmoke")
+			//.style("background-color","WhiteSmoke")
 			.attr({
 				"width":chartWidth,
 				"height":chartHeight
@@ -445,13 +544,15 @@ function playerComparisonFantasy()
 	//console.log(playerA);
 	playerA = addFantasyTotals(playerA);
 	playerB = addFantasyTotals(playerB);
+	var height = 120
 
+	console.log(playerA);
 
-	 d3.select("body").append("svg")
+	 d3.select("body").select("#timeLine").append("svg")
 	 				.attr("class","timeline")
-					.attr("width", 1000)
-					.attr("height", 200)
-					//.style("background-color","black")
+					.attr("width", 900)
+					.attr("height", height)
+					//.style("background-color","WhiteSmoke")
 					.style("margin-top","10px");
 	
 	d3.select("svg.timeline")
@@ -469,14 +570,14 @@ function playerComparisonFantasy()
 			.attr("class","p2");
 
 	var xScale = d3.scale.linear()
-							.range([30,980])
-							.domain([0,17]);
+							.range([30,890])
+							.domain([0,10]);
 			
 	var yScale = d3.scale.linear()
-					.range([180,20])
+					.range([height-20,20])
 					.domain([0,30]);
 
-	console.log(getMax(playerA,playerB,'total',17));
+	console.log(getMax(playerA,playerB,'total',10));
 
 	// d3.selectAll("circle")
 	// 	.attr("cx",function(d,i)
@@ -509,11 +610,11 @@ function playerComparisonFantasy()
 		.attr("d",line(getFantasyTotal(playerB.fantasyStats)))
 		.attr("class","p2");
 
-	var xAxis = d3.svg.axis().scale(xScale).ticks(18);
+	var xAxis = d3.svg.axis().scale(xScale).ticks(10);
 			d3.select("svg.timeline")
 				.append("g")
 				.attr("class","x axis")
-				.attr("transform","translate(0,180)")
+				.attr("transform","translate(0,100)")
 				.call(xAxis);	
 				
 	var yAxis = d3.svg.axis().scale(yScale).orient("left");
@@ -523,29 +624,6 @@ function playerComparisonFantasy()
 				.attr("transform","translate(30,0)")
 				.call(yAxis);
 
-	/*
-		// var chartA = d3.select("#playerA")
-		// 	.attr("class","totalComparisonGraph")
-		// 	.style("margin-left","10px")
-		// 	.append("svg")
-		// 		;
-				
-		// var params = setFantasyComparisonParameters(chartA,playerA,playerB);
-
-		// chartA.selectAll("div.line")
-		// 			.data(playerA.fantasyStats)
-		// 			.enter()
-		// 			.append("div")
-		// 				.attr("class","line");
-
-		//playerComparisonFantasyBreakdown(chartA,playerA,0,params);
-
-		// var chartB = d3.select("#playerB")
-		// 	.attr("class","totalComparisonGraph")
-		// 	.append("div");
-
-		// setFantasyComparisonParameters(chartB,playerA,playerB);
-	*/
 }
 
 function playerComparisonFantasyBreakdown(chart,player,playerTurn,params)
@@ -566,7 +644,7 @@ function playerComparisonFantasyBreakdown(chart,player,playerTurn,params)
 						.append("rect")
 							.attr("class","horizontalBar");
 
-	console.log(d3.select('#playerA'));
+	//console.log(d3.select('#playerA'));
 
 	var xScale = params.x;
 	var yScale = params.y;
@@ -664,17 +742,15 @@ function getFantasyTotal(stats)
 	var total=[];
 	$.each(stats, function(i,item)
 	{
-		console.log(item);
-		if(i!=0)
+		if(i!=0 && i<11)
 		{
 			total[i]=item.total;
 		}
-		else
+		else if(i == 0)
 		{
 			total[i]=0;
 		}
 	});
-	console.log("total: " +total);
 	return total;
 
 }
