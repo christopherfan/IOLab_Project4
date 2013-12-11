@@ -3,27 +3,218 @@ body
 	background-color: "black";
 }
 
+ .CHI
+{
+       color: orangered;
+       fill: orangered;
+}
+
+
+ .ARI
+{
+       color: #9B2743 ;
+       fill: #9B2743 ;
+}
+
+ .ATL
+{
+	color: #A6192E;
+	fill: #A6192E;
+}
+
+
+ .BAL
+{
+	color: #24135F;
+	fill: #24135F;
+}
+
+
+ .BUF
+{
+	color: #081F2C;
+	fill: #081F2C;
+}
+
+
+ .CAR
+{
+	color: #0085CA;
+	fill: #0085CA;
+}
+ 
 .CHI
 {
-	color: orangered;
-	fill: orangered;
+	color: #081F2C;
+	fill: #081F2C;
 }
+
+
+.CLE
+{
+	color: #FC4C02;
+	fill: #FC4C02;
+}
+
+
+.DAL
+{
+	color: #0C2340;
+	fill: #0C2340;
+}
+
+
+.DEN
+{
+	color: #FC4C02;
+	fill: #FC4C02;
+}
+
 
 .DET
 {
-	color: royalblue;
-	fill: royalblue;
+	color: #00558C;
+	fill: #00558C;
 }
 
-.MIA
+ .GB
 {
-	color: mediumturquoise;
-	fill: mediumturquoise;
+	color: #183028;
+	fill: #183028;
 }
 
-.SF 
-{
 
+ .HOU
+{
+	color: #A6192E;
+	fill: #A6192E;
+}
+
+
+ .IND
+{
+	color: #003A70;
+	fill: #003A70;
+}
+
+
+ .JAC
+{
+	color: #006272;
+	fill: #006272;
+}
+
+
+ .KC
+{
+	color: #A6192E;
+	fill: #A6192E;
+}
+
+ .MIA
+{
+	color: #005F61;
+	fill: #005F61;
+}
+
+ .MIN
+{
+	color: #330072;
+	fill: #330072;
+}
+
+
+ .NE
+{
+	color: #0C2340;
+	fill: #0C2340;
+}
+
+
+ .NO
+{
+	color: #85714D;
+	fill: #85714D;
+}
+
+
+.NYG
+{
+	color: #001E62;
+	fill: #001E62;
+}
+
+
+.NYJ
+{
+	color: #183028;
+	fill: #183028;
+}
+
+
+.OAK
+{
+	color: #1E1E1E;
+	fill: #1E1E1E;
+}
+
+
+.PHI
+{
+	color: #004851;
+	fill: #004851;
+}
+
+
+.PIT
+{
+	color: #2C2A29;
+	fill: #2C2A29;
+}
+
+.STL
+{
+	color: #85714D;
+	fill: #85714D;
+}
+
+
+.SD
+{
+	color: #0C2340;
+	fill: #0C2340;
+}
+
+
+.SF
+{
+	color: #BB2B4B;
+	fill: #BB2B4B;
+}
+
+.SEA
+{
+	color: #213D5A;
+	fill: #213D5A;
+}
+
+.TB
+{
+	color: #A6192E;
+	fill: #A6192E;
+}
+
+
+.TEN
+{
+	color: #418FDE;
+	fill: #418FDE;
+}
+
+.WAS
+{
+	color: #782F40;
+	fill: #782F40;
 }
 
 #wrapper
@@ -75,6 +266,7 @@ path
 .btn-selection
 {
 	height:20px;
+	min-width:100px;
 }
 
 #categories
@@ -139,13 +331,15 @@ div.totalComparisonGraph
 
 #playerA
 {
-   /*box-shadow: 0px 0px 20px green;*/
+   box-shadow: 0px 0px 10px black;
    margin-left: 4px;
+
 }
 
 #playerB
 {
 	/*-webkit-filter: grayscale(100%);*/
+	box-shadow: 0px 0px 10px black;
 }
 
 div.recomendation
@@ -250,6 +444,9 @@ rect.lineYds:hover
 .nflGraph
 {
 	background-color: whitesmoke;
+	box-shadow: 0px 0px 10px black;
+	margin-bottom:10px;
+	border-radius: 2px;
 }
 
 .axis path, .axis line

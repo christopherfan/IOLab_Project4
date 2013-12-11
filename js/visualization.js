@@ -5,12 +5,12 @@ var playerB;
 function playerSelection(player1,player2)
 {
 	//d3.select('body').style("background-color","WhiteSmoke");
-	d3.json("Data/ffTeamsStatistics_Final.json",function(error,json)
+	d3.json("Data/ffTeamsStatistics_FreeAgents_Final.json",function(error,json)
 	{
 		console.log(json);
 		var team = json['Wait for it'];
-		playerA = team[0];
-		playerB = team[6];
+		playerA = json['BOSS MARTINFL'][1];
+		playerB = team[0];
 		playerComparison();
 		playerComparisonFantasy(playerA,playerB);
 	});
