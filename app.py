@@ -9,6 +9,11 @@ app = Flask(__name__)
 def index():    
     return render_template('index.html')
 
+@app.route('/compare')
+def compare():    
+    return render_template('comparison.html')
+
+
 @app.route('/getRecommendations')
 def getRecommendations():
     team_name = 'Wait for it'

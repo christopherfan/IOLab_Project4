@@ -1,11 +1,12 @@
 
 
+
 var playerA;
 var playerB;
 function playerSelection(player1,player2)
 {
 	//d3.select('body').style("background-color","WhiteSmoke");
-	d3.json("Data/ffTeamsStatistics_FreeAgents_Final.json",function(error,json)
+	d3.json("static/Data/ffTeamsStatistics_FreeAgents_Final.json",function(error,json)
 	{
 		console.log(json);
 		var team = json['Wait for it'];

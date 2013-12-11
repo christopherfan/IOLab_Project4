@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Player Comparison</title>
-	
+	<!--
 	<link href='http://fonts.googleapis.com/css?family=Bowlby+One+SC' rel='stylesheet' type='text/css'>
 	<link href="css/visualization.css" rel="stylesheet" type="text/css">
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
@@ -10,11 +10,17 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script src="js/d3.v3.js"></script>
     <script src="js/visualization.js"></script>
+-->
 
 </head>
 
 <body>
 	<div id="wrapper">
+		<input type="hidden" value="Wait for it" id="playerATeam">
+		<input type="hidden" value="{" id="playerAId">
+		<input type="hidden" value="{{ teamB }}" id="playerBTeam">
+		<input type="hidden" value="{{ playerA }} id="playerBId">
+
 		<div id="playersComparison">
 			<div id="playerA" class="totalComparisonGraph">
 				<div class="playerName"></div>
@@ -35,15 +41,6 @@
 			</div>
 
 			<div id="categories">
-				<!-- <div class="btn btn-group" id="statButtons">
-					<a href="" class="btn btn-selection" onClick="statFantasySelection();return false;">Fantasy Points</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('passing_tds');return false;">Passing Touchdowns</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('passing_yds');return false;">Passing Yards</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('receiving_tds');return false;">Receiving Touchdowns</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('receiving_yds');return false;">Receiving Yards</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('rushing_tds');return false;">Rushing Touchdowns</a>
-					<a href="" class="btn btn-selection" onClick="statSelection('rushing_yds');return false;">Rushing Yards</a>
-				</div> -->
 					<div id="passing_tds_cat" class="statCategoryBtn"> 
 						
 						<img src=""><br><a href="" class="btn btn-selection" onClick="statSelection('passing_tds');return false;">Passing TDs</a>

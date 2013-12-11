@@ -7,53 +7,58 @@
 <title>Fantasy Recommendation System</title>
 <script type="text/javascript" src="static/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="static/js/script.js"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Bowlby+One+SC' rel='stylesheet' type='text/css'>
+<link href="static/css/visualization.css" rel="stylesheet" type="text/css">
+<link href="static/css/bootstrap.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="static/js/bootstrap.js"></script>
+<script src="static/js/d3.v3.js"></script>
+<script src="static/js/visualization.js"></script>
 </head>
 <body>
 	<header>
 		<h1>Fantasy Football</h1>
 	</header>
-	<section>
-		<h2> Welcome Pablo!</h2>	
-	</section>
-	<section id="team">
-		<div id ="first">
-			<div id="receivers">
+	<div style="display:block;" id="mainTeamPage">
+		<section>
+			<h2> Welcome Pablo!</h2>	
+		</section>
+		<div id="team">
+			<div id ="first">
+				<div id="receivers"></div>
+				<div id="tightends"></div>
 			</div>
-			<div id="tightends">
+			<div id="second">
+				<div id="quarterbacks"></div>
 			</div>
+			<div id="third">
+				<div id="runningbacks"></div>
+			</div>	
+			<div id="fourth">
+				<div id="defense"></div>
+				<div id="kicker"></div>
+			</div>
+				<!-- <section class="stats">
+					<table>
+						<tr>
+							<th>Stats</th>
+						</tr>
+						<tr>
+							<td>R. Yds</td>
+							<td>3</td>
+						</tr>
+						<tr>
+							<td>P. Yds</td>
+							<td>5</td>
+						</tr>					
+					</table>
+				</section>
+				<section class="action">
+					<img src="static/images/Thumbs-Up.jpg">
+				</section> -->
 		</div>
-		<div id="second">
-			<div id="quarterbacks">
-			</div>
-		</div>
-		<div id="third">
-			<div id="runningbacks">
-			</div>
-		</div>	
-		<div id="fourth">
-			<div id="defense">
-			</div>
-			<div id="kicker">
-			</div>
-		</div>
-			<!-- <section class="stats">
-				<table>
-					<tr>
-						<th>Stats</th>
-					</tr>
-					<tr>
-						<td>R. Yds</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>P. Yds</td>
-						<td>5</td>
-					</tr>					
-				</table>
-			</section>
-			<section class="action">
-				<img src="static/images/Thumbs-Up.jpg">
-			</section> -->
-	</section>
+	</div>
+	<div id="comparePlayers" style="display:block;"></div>
+
 </body>
 </html>
