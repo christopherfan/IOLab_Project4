@@ -1,4 +1,3 @@
-
 Project Name: Fantasy Football Advisor
 
 Project Description:
@@ -6,8 +5,8 @@ Fantasy Football Advisor is a Recommendation System that suggests the best playi
 
 Team Members and Responsibilties:
 Ramit Malhotra: Front End Development
-Pablo Arvizu: Visualizations
-Chris Fan: Back End Development
+Pablo Arvizu: D3 Visualizations
+Chris Fan: Back End Development, Database Extraction, Data Extraction/Transformation
 Ashwin Chandak: Recommendation Engine Algorithm Development
 
 Technologies Used: 
