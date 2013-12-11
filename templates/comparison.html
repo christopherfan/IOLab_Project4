@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Player Comparison</title>
+	
+	<link href="css/visualization.css" rel="stylesheet" type="text/css">
+	<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script src="js/d3.v3.js"></script>
+    <script src="js/visualization.js"></script>
+
+</head>
+
+<body>
+	<div id="playerA" class="totalComparisonGraph">
+		<img src="">
+	</div>
+	<div class="btn btn-group btn-group-vertical" id="statButtons">
+		<a href="" class="btn" onClick="statSelection('passing_tds');return false;">Passing TDs</a>
+		<a href="" class="btn" onClick="statSelection('passing_yds');return false;">Passing Yds</a>
+		<a href="" class="btn" onClick="statSelection('receiving_tds');return false;">Receiving TDs</a>
+		<a href="" class="btn" onClick="statSelection('receiving_yds');return false;">Receiving Yds</a>
+		<a href="" class="btn" onClick="statSelection('rushing_tds');return false;">Rushing TDs</a>
+		<a href="" class="btn" onClick="statSelection('rushing_yds');return false;">Rushing Yds</a>
+		
+	</div>
+	<div id="playerB" class="totalComparisonGraph">
+		<img src="">
+	</div>
+	<div id="graphs">
+	</div>	
+	<script>
+
+		playerSelection();
+		
+    </script>
+
+</body>
+</html>
