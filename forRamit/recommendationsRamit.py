@@ -9,6 +9,14 @@ def readFFTeamsStats():
 	json_file.close()
 	return json_data		
 
+def read():
+	json_file = open ('ffTeamsStatistics_FreeAgents_final.json', 'r')
+	json_data = json.load(json_file)
+	season_json = {}
+			
+	json_file.close()
+	return json_data			
+	
 def readTeamSeasonStat():
 	json_file = open ('teamSeasonStatistics_final.json', 'r')
 	json_data = json.load(json_file)
