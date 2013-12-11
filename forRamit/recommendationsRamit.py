@@ -360,7 +360,7 @@ def genFreeAgentScores(statNFL,week):
 	for key, value in statPlayers.iteritems():		
 		players = generateRecommendation(value, week, statNFL)
 		players = sorted(players, key = lambda x: x[2], reverse=True)
-		freeAgent_scores.append ((key, players[5:15]))
+		freeAgent_scores.append ((key, players[4:15]))
 		 # freeAgent_scores +=generateRecommendation(value, week, statNFL)
 		
 	# return sorted(freeAgent_scores, key = lambda x: x[2], reverse=True
@@ -380,67 +380,6 @@ def generatePlayerRecommendations(ffTeamName, week):
 	
 	
 	return roster(answer)
-
-def recommendationsRamit(tuple):
-
-	team_rank = tuple['ffTeamRank']
-	free_agents = tuple['freeAgents']
-	rushers = free_agents[0][1]
-	passers = free_agents[1][1]
-	receivers = free_agents[2][1]
-	
-	print ">>>>>>>>>> Team" 
-	for stuff in team_rank:
-		print stuff
-		
-	print ">>>>>>>>>Receivers" 
-	for stuff in receivers:
-		print stuff
-	print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.." 
-	wr = []
-	other = []
-	for index in xrange(9):		
-		if receivers[index][2]=='WR':
-			# print "Push: ", receivers[index]
-			wr.append(receivers[index])			
-		else:
-			print "Skipped: ", receivers[index]
-			other.append(receivers[index])
-	other = other + rushers
-	# print "WR: ", wr
-	print " Other: ", other
-					
-	final_list = []
-	
-	for index in xrange(len(team_rank)):
-		player = team_rank[index]	
-		# print " ##", player
-		if player[2] == 'QB' and player[3] < passers[0][3]:
-			print "QB: ", player[1] , " is worse qb than", passers[0][1]
-			final_list.append(player+('Drop' , passers[0])) 
-			passers.pop(0)
-		elif player[2] == 'QB' and player[3] > passers[0][3]:
-			print "QB: ", player[1] , " is better ", passers[0][1]			
-			final_list.append(player + ('Keep_Play',))
-		elif player[2] == 'WR' and player[3] < wr[0][3]:		
-			print "WR: ", player[1] , " is worse wr than", wr[0][1]			
-			final_list.append(player + ('Drop',wr[0]))
-			wr.pop(0)			
-		elif player[2] == 'WR' and player[3] > wr[0][3]:		
-			print "WR: ", player[1] , " is better ", wr[0][1]			
-			final_list.append(player + ('Keep_Play',))
-		elif (player[2] == 'TE' or player[2]=='RB') and player[3] < other[0][3]:		
-			print player[2], player[1] , " is worse than the other", other[0][1]			
-			final_list.append(player + ('Drop', other[0]))
-			other.pop(0)
-		elif (player[2] == 'TE' or player[2]=='RB') and player[3] > other[0][3]:		
-			print player[2], player[1] , " is better ", other[0][1]			
-			final_list.append(player + ('Keep_Play',))
-		else:
-			print "other player"
-			final_list.append(player + ('Keep_play', ))
-	for stuff in final_list:
-		print stuff
 
 def tester():
 	# freeAgent = genFreeAgentScores(statNFL, 10)
@@ -529,11 +468,11 @@ def roster(tuple):
 	players_added = 0
 	wr_count =0
 	players_playing =0
+	rb_count =0
 	
 	for player in roster:
 		if players_added ==15:
 			break 		
-
 		if players_playing <8:		
 			if(player[1][2] =='QB' and qb_count ==1):			
 				if player[0] == 'team':
@@ -549,7 +488,14 @@ def roster(tuple):
 				continue
 			elif(player[1][2]=='WR'):
 				wr_count +=1		
-								
+			if(player[1][2] =='RB' and rb_count ==2):
+				if player[0] == 'team':
+					final_roster.append(('keep_bench', ('team', player[1]+('Keep_bench',))))
+					players_added+=1
+				continue
+			elif(player[1][2]=='RB'):
+				rb_count +=1		
+				
 			if player[0] =='team':
 				# final_roster.append(player + ('Keep_Play',))
 				final_roster.append(('keep_play', ('team', player[1]+('Keep_play',))))
