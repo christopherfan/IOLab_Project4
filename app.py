@@ -19,8 +19,7 @@ def getRecommendations():
     for player in answer:
         data[i]=player
         i=i+1  
-    return jsonify(data)
-    
+    return jsonify(data)   
 
 if __name__ == '__main__':
     app.debug = True

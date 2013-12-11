@@ -12,33 +12,42 @@ $(document).ready(function(){
 				});
 				$.each(team, function(key,value){
 						if(value[2] == "WR"){
-							$("#receivers").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</span></div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#receivers").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</span></div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 						}
 						else if(value[2] == "TE"){
-							$("#tightends").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#tightends").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 						}
 						else if(value[2] == "QB"){
-							$("#quarterbacks").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#quarterbacks").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 						}
 						else if(value[2] == "RB"){
-							$("#runningbacks").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#runningbacks").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 						}
 						else if(value[2] == "DEF"){
-							$("#defense").append("<div id='"+value[0]+"' class='card def'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#defense").append("<div id='"+value[0]+"' class='card def'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 						}
 						else 
-							$("#kicker").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+value[0]+"' class='analysis' href='#'>Why?</a></div>");
+							$("#kicker").append("<div id='"+value[0]+"' class='card'><header><span>"+value[1]+"</span></header><img src='static/images/"+value[1]+".jpg' alt='"+value[1]+"'><div id='stats'><div>"+value[2]+"</div><div><span>Rating<br>"+value[3].toFixed(2)+"</div></div><div id='rec'><img src='static/images/Thumbs-Up.jpg'><a id='"+key+"' class='analysis' href='#'>Why?</a></div>");
 				});
 			}
 		}
 	});
 	function setPlayers(data){
 		players=data;
+		console.log(players);	
 	}
-	$(".analysis").on("click",function(){
-		alert("hi");
+	$(document).on("click",".analysis",function(){
 		var ide = this.id;
-		console.log(ide);
+		var comparison_data=players[ide];
+		comparison_data.shift();
+		data = {};
+		player1 = [];
+		player1.push(comparison_data[0][0]);
+		player1.push(comparison_data[0][1][0]);
+		player2 = [];
+		player2.push(comparison_data[1][0]);
+		player2.push(comparison_data[1][1][0]);
+		playerSelection(player1,player2);
 	});
 	
 });
