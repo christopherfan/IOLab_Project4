@@ -604,7 +604,7 @@ def findNext(roster, player):
 			if person[3]<player_score:
 				last_person = person
 				break;
-			if person[0] !=player[1]:
+			if person[1] !=player[1]:
 				last_person = person
 				
 	if position == 'DEF' or position=='K':
